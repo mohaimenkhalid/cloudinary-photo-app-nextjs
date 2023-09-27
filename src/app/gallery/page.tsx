@@ -6,6 +6,7 @@ export default async function GalleryPage() {
     const result = await cloudinary.v2.search
         .expression('resource_type:image')
         .sort_by('created_at','desc')
+        .with_field('tags')
         .max_results(10)
         .execute()
         // .then(result=>console.log(result));
@@ -15,14 +16,14 @@ export default async function GalleryPage() {
               <h1 className="text-2xl font-bold">Galley</h1>
               <UploadButton/>
           </div>
-          {/*{JSON.stringify(result)}*/}
+          {/*{JSON.stringify(result.resources[0].public_id)}*/}
           <div className="grid grid-cols-4 gap-4 mt-5">
               {
                   result && result.resources.map(item => {
                       return (
                           <ImageCard
                               key={item.public_id}
-                              publicID={item.public_id}
+                              imageData={item}
                               width="400"
                               height="300"
                           />
