@@ -1,11 +1,14 @@
 "use client"
-
+import {useTransition} from 'react'
 import {CldImage} from 'next-cloudinary';
 import SetAsFavouriteAction from "@/app/gallery/actions";
+import {Spinner} from "@nextui-org/react";
 
 export default function ImageCard({imageData, ...props}) {
 
     const isFavourite = imageData.tags.includes('favourite')
+    const [isPending, startTransition] = useTransition();
+    if (isPending) return <Spinner label="processing..." color="default" labelColor="foreground"/>
     return (
         <div className="relative">
             <CldImage
@@ -17,9 +20,13 @@ export default function ImageCard({imageData, ...props}) {
             {
                 !isFavourite ?
                     (
-                        <button className="absolute right-3 top-2 hover:text-red-500 bg-[#ffffff8c] rounded-full py-2 px-2" onClick={() => {
-                            SetAsFavouriteAction(imageData.public_id)
-                        }}>
+                        <button className="absolute right-3 top-2 hover:text-red-500 bg-[#ffffff8c] rounded-full py-2 px-2"
+                                onClick={() => {
+                                    startTransition(() => {
+                                        SetAsFavouriteAction(imageData.public_id, true)
+                                    })
+
+                                }}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                                  stroke="currentColor" className="w-6 h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round"
@@ -28,9 +35,12 @@ export default function ImageCard({imageData, ...props}) {
                         </button>
                     )
                     :
-                    <button className="absolute right-3 top-2 hover:text-red-500 bg-[#ffffff8c] rounded-full py-2 px-2" onClick={() => {
-                        console.log("aaa")
-                    }}>
+                    <button className="absolute right-3 top-2 hover:text-red-500 bg-[#ffffff8c] rounded-full py-2 px-2"
+                            onClick={() => {
+                                startTransition(() => {
+                                    SetAsFavouriteAction(imageData.public_id, false)
+                                })
+                            }}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" strokeWidth={1.5}
                              stroke="red" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round"
