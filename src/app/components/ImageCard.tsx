@@ -4,7 +4,7 @@ import {CldImage} from 'next-cloudinary';
 import SetAsFavouriteAction from "@/app/gallery/actions";
 import {Spinner} from "@nextui-org/react";
 
-export default function ImageCard({imageData, ...props}) {
+export default function ImageCard({imageData, path, ...props}) {
 
     const isFavourite = imageData.tags.includes('favourite')
     const [isPending, startTransition] = useTransition();
@@ -23,7 +23,7 @@ export default function ImageCard({imageData, ...props}) {
                         <button className="absolute right-3 top-2 hover:text-red-500 bg-[#ffffff8c] rounded-full py-2 px-2"
                                 onClick={() => {
                                     startTransition(() => {
-                                        SetAsFavouriteAction(imageData.public_id, true)
+                                        SetAsFavouriteAction(imageData.public_id, true, path)
                                     })
 
                                 }}>
@@ -38,7 +38,7 @@ export default function ImageCard({imageData, ...props}) {
                     <button className="absolute right-3 top-2 hover:text-red-500 bg-[#ffffff8c] rounded-full py-2 px-2"
                             onClick={() => {
                                 startTransition(() => {
-                                    SetAsFavouriteAction(imageData.public_id, false)
+                                    SetAsFavouriteAction(imageData.public_id, false, path)
                                 })
                             }}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" strokeWidth={1.5}
@@ -48,12 +48,6 @@ export default function ImageCard({imageData, ...props}) {
                         </svg>
                     </button>
             }
-
-
-
-
-
-
         </div>
     )
 }

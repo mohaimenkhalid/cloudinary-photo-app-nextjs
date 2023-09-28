@@ -11,7 +11,7 @@ export default async function GalleryPage() {
         .execute()
         // .then(result=>console.log(result));
   return (
-      <div className="px-5 1``">
+      <div className="px-5">
           <div className="flex justify-between">
               <h1 className="text-2xl font-bold">Galley</h1>
               <UploadButton/>
@@ -24,6 +24,7 @@ export default async function GalleryPage() {
                           <ImageCard
                               key={item.public_id}
                               imageData={item}
+                              path={'/gallery'}
                               width="400"
                               height="300"
                           />
