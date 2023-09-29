@@ -1,12 +1,13 @@
 import cloudinary from "cloudinary";
 import ImageCard from "@/app/components/ImageCard";
+import PhotoList from "@/app/components/PhotoList";
 
 export default async function FavouritePage() {
     const result = await cloudinary.v2.search
         .expression('resource_type:image AND tags:favourite')
         .sort_by('created_at','desc')
         .with_field('tags')
-        .max_results(5)
+        .max_results(10)
         .execute()
         // .then(result=>console.log(result));
   return (
@@ -14,36 +15,10 @@ export default async function FavouritePage() {
           <div className="flex justify-between">
               <h1 className="text-2xl font-bold">Favourite</h1>
           </div>
-          {/*{JSON.stringify(result.resources.length)}*/}
-
-          {
-              result.resources.length === 0
-                  ? <div className="h-40 w-full flex justify-center items-center flex-col">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                      </svg>
-
-                      <div>No Data Found!</div>
-                    </div>
-                  : null
-          }
-
-
-          <div className="grid grid-cols-4 gap-4 mt-5">
-              {
-                  result && result.resources.map(item => {
-                      return (
-                          <ImageCard
-                              key={item.public_id}
-                              imageData={item}
-                              path={'favourites'}
-                              width="400"
-                              height="300"
-                          />
-                      )
-                  })
-              }
-          </div>
+          <PhotoList
+              photoItems={result.resources}
+              refreshActionPath={'favourites'}
+          />
       </div>
   )
 }
